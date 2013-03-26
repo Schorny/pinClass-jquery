@@ -130,6 +130,19 @@
                     writeTextFailed("pinClass didn't intercept className manipulation")
                     ok=false;
                 }
+                e=document.getElementById("testObj2");
+                if(!e._setAttribute) {
+                    writeTextFailed("no _setAttribute");
+                    ok=false;
+                } else {
+                    e._setAttribute(classNameValue, "displayInline");
+                    if($("#testObj2").css("display")==="inline") {
+                        writeTextSuccess("_setAttribute works");
+                    } else {
+                        writeTextFailed("_setAttribute failed");
+                        ok=false;
+                    }
+                }
 
                 writeText("Watcher Style used: "+window.watcherStyle);
 

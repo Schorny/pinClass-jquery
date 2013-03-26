@@ -110,7 +110,9 @@ textarea {
     font-weight: bold;
 }
 
-
+.displayInline {
+    display:inline;
+}
 
 
 
