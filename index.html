@@ -43,6 +43,7 @@
 
             var success = 0;
             var failed = 0;
+            var ok=true;
             function writeTextSuccess(txt) {
                 ++success;
                 $("#result").html($("#result").html()+"<p class='success'>"+txt+"</p>");
@@ -63,6 +64,12 @@
                 if(success) {
                     $("#result").html($("#result").html()+"<p class='success'>"+success+" Tests succeded</p>");
                 }
+                if(ok) {
+                    $("#result").html($("#result").html()+"<p class='success'>The Whole Test was a Success</p>");
+                } else {
+                    $("#result").html($("#result").html()+"<p class='failed'>The Test Failed :(</p>");
+                }
+                writeText("Your Browser: "+window.navigator.appName+" | "+window.navigator.appVersion+" | "+window.navigator.platform+" ("+window.navigator.userAgent+")");
             }
 
             $(document).on("click", ".runtest", function() {
@@ -94,7 +101,7 @@
                 }
 
                 if(res) {
-                    writeTextFailed("Delete className failed");
+                    writeTextFailed("Delete className failed (this is OK)");
                 } else {
                     writeTextSuccess("Delete className succeeded");
                 }
@@ -103,7 +110,8 @@
                 if($("#testObj1").css("display")==="none") {
                     writeTextSuccess("setAttribute still works");
                 } else {
-                    writeTextFailed("setAttribute failed (this is OK)");
+                    writeTextFailed("setAttribute failed");
+                    ok=false;
                 }
 
                 $("#testObj2").pinClass("displayNone");
@@ -113,12 +121,14 @@
                     writeTextSuccess("pinClass appears to have succeeded");
                 } else {
                     writeTextFailed("pinClass appears to have failed");
+                    ok=false;
                 }
 
                 if(window.watcherRewroteClassName) {
                     writeTextSuccess("pinClass intercepted className manipulation")
                 } else {
                     writeTextFailed("pinClass didn't intercept className manipulation")
+                    ok=false;
                 }
 
                 writeText("Watcher Style used: "+window.watcherStyle);
