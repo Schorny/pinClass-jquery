@@ -106,6 +106,7 @@
                     writeTextSuccess("Delete className succeeded");
                 }
 
+                writeText("className value is "+classNameValue);
                 e.setAttribute(classNameValue, "displayNone");
                 if($("#testObj1").css("display")==="none") {
                     writeTextSuccess("setAttribute still works");
