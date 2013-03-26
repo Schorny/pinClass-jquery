@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+
+        <!-- Add your site or application content here -->
+        <p>This is a simple Testsite for pinClass.</p>
+
+        <input type="button" value="Run Test" class="runtest">
+
+        <div id="result">
+
+        </div>
+
+        <div id="testObj1" class="test">
+
+        </div>
+
+        <div id="testObj2" class="displayNone">
+
+        </div>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+        <script>
+
+            var success = 0;
+            var failed = 0;
+            function writeTextSuccess(txt) {
+                ++success;
+                $("#result").html($("#result").html()+"<p class='success'>"+txt+"</p>");
+            }
+            function writeTextFailed(txt) {
+                ++failed;
+                $("#result").html($("#result").html()+"<p class='failed'>"+txt+"</p>");
+            }
+
+            function writeText(txt) {
+                $("#result").html($("#result").html()+"<p class='normal'>"+txt+"</p>");
+            }
+
+            function writeSummary() {
+                if(failed) {
+                    $("#result").html($("#result").html()+"<p class='failed'>"+failed+" Tests failed</p>");
+                }
+                if(success) {
+                    $("#result").html($("#result").html()+"<p class='success'>"+success+" Tests succeded</p>");
+                }
+            }
+
+            $(document).on("click", ".runtest", function() {
+                var ie = (function(){
+                    var undef,
+                            v = 3,
+                            div = document.createElement('div'),
+                            all = div.getElementsByTagName('i');
+
+                    while (
+                            div.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->',
+                                    all[0]
+                            );
+
+                    return v > 4 ? v : undef;
+                }());
+
+                //ie requires className in setAttribute, while everyone else requires class
+                var classNameValue = ie===6 ? "className" : "class";
+
+                var e=document.getElementById("testObj1");
+
+                var res=null;
+                try {
+                    delete e.className;
+                    res= e.className;
+                } catch(e) {
+                    res=true;
+                }
+
+                if(res) {
+                    writeTextFailed("Delete className failed");
+                } else {
+                    writeTextSuccess("Delete className succeeded");
+                }
+
+                e.setAttribute(classNameValue, "displayNone");
+                if($("#testObj1").css("display")==="none") {
+                    writeTextSuccess("setAttribute still works");
+                } else {
+                    writeTextFailed("setAttribute failed (this is OK)");
+                }
+
+                $("#testObj2").pinClass("displayNone");
+                $("#testObj2").removeClass();
+
+                if($("#testObj2").css("display")==="none") {
+                    writeTextSuccess("pinClass appears to have succeeded");
+                } else {
+                    writeTextFailed("pinClass appears to have failed");
+                }
+
+                if(window.watcherRewroteClassName) {
+                    writeTextSuccess("pinClass intercepted className manipulation")
+                } else {
+                    writeTextFailed("pinClass didn't intercept className manipulation")
+                }
+
+                writeText("Watcher Style used: "+window.watcherStyle);
+
+                writeSummary();
+            });
+        </script>
+    </body>
+</html>
